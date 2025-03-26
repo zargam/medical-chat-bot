@@ -53,7 +53,6 @@ packaging==24.2
 pillow==11.1.0
 pinecone==6.0.2
 pinecone-client==5.0.1
-pinecone-plugin-inference==1.1.0
 pinecone-plugin-interface==0.0.7
 propcache==0.3.1
 protobuf==5.29.4
