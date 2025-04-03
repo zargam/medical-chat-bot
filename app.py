@@ -58,13 +58,14 @@ def detect_intent(message, chat_history):
     - Farewell (e.g., "bye", "goodbye", "have a nice day", "see you")
     - Medical Query (e.g., "What is diabetes?", "How to treat fever?")
     - Follow-up (e.g., "Tell me in detail", "Explain more", "What else?")
+    - Creator (e.g., "Who developed you?", "Who made you?", "Who created you?")
     - Other (e.g., "What’s the weather?", "Tell me a joke")
     
     Chat History:
     {history_str}
     
     Message: "{message}"
-    Return only the category name (e.g., 'Greeting', 'Gratitude', 'Farewell', 'Medical Query', 'Follow-up', 'Other'):"""
+    Return only the category name (e.g., 'Greeting', 'Gratitude', 'Farewell', 'Medical Query', 'Follow-up', 'Creator','Other'):"""
     
     intent = llm.invoke(intent_prompt).strip()
     print(f"Detected intent for '{message}': {intent}")  # Debugging
@@ -87,15 +88,19 @@ def handle_message(message):
     intent = detect_intent(message, chat_history)
     
     if intent == "Greeting":
-        greeting_prompt = f"""User said: '{message}'. Respond with a friendly and natural greeting."""
-        response = llm.invoke(greeting_prompt).strip()
-        print(f"Raw Greeting response: {response}")  # Debugging raw output
-        response = clean_response(response)  # Clean quotes
-        if not response:  # Fallback if blank
-            response = "Hello! How can I assist you today?"
-        print(f"Cleaned Greeting response: {response}")  # Debugging cleaned output
+        response = "Hi there! How can I assist you with your health today?"  # Direct response
+        print(f"Greeting response: {response}")
         memory.save_context({"question": message}, {"answer": response})
         return response
+        # greeting_prompt = f"""User said: '{message}'. Respond with a friendly and natural greeting."""
+        # response = llm.invoke(greeting_prompt).strip()
+        # print(f"Raw Greeting response: {response}")  # Debugging raw output
+        # response = clean_response(response)  # Clean quotes
+        # if not response:  # Fallback if blank
+        #     response = "Hello! How can I assist you today?"
+        # print(f"Cleaned Greeting response: {response}")  # Debugging cleaned output
+        # memory.save_context({"question": message}, {"answer": response})
+        # return response
     
     elif intent == "Gratitude":
         gratitude_prompt = f"""User said: '{message}'. Respond with a polite acknowledgment like 'You're welcome!' or 'Glad to help!'."""
@@ -141,6 +146,11 @@ def handle_message(message):
             response = "I don’t have enough context to provide details. Could you please ask a medical question first?"
             memory.save_context({"question": message}, {"answer": response})
             return response
+        
+    elif intent == "Creator":
+        response = "Zargam Hussain"  # Direct response without LLM generation
+        memory.save_context({"question": message}, {"answer": response})
+        return response
     
     else:
         response = "I’m a medical chatbot here to help with health-related questions. How can I assist you with your health today?"
@@ -159,6 +169,7 @@ def chat():
     if not response:  # Final fallback for blank response
         response = "Sorry, I couldn’t process that. How can I assist you?"
     return str(response)
+    
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)
