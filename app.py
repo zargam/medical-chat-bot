@@ -59,7 +59,7 @@ def detect_intent(message, chat_history):
     - Medical Query (e.g., "What is diabetes?", "How to treat fever?")
     - Follow-up (e.g., "Tell me in detail", "Explain more", "What else?")
     - Creator (e.g., "Who developed you?", "Who made you?", "Who created you?")
-    - Casual (e.g., "How are you?", "what's going on?", "Nice to meet you", "Good to know")
+    - Casual (e.g., "How are you?", "What’s up?", "Nice to meet you", "Good to know","Who are you?")
     - Other (e.g., "What’s the weather?", "Tell me a joke")
     
     Chat History:
@@ -155,10 +155,11 @@ def handle_message(message):
     
     elif intent == "Casual":
         casual_prompt = f"""You are a friendly medical chatbot. The user said: '{message}'. Respond in a casual, conversational tone in English while keeping it relevant to your role as a medical assistant. Keep the response short and end with a question to keep the chat going. Examples:
-        - User: "How are you?" → "I’m doing great, thanks! How can I help you with your health today?"
-        - User: "What’s up?" → "Just chilling, ready to help! What’s on your mind today?"
-        - User: "Nice to meet you" → "Nice to meet you too! How can I assist you today?"
-        """
+            - User: "How are you?" → "I’m doing great, thanks! How can I help you with your health today?"
+            - User: "What’s up?" → "Just chilling, ready to help! What’s on your mind today?"
+            - User: "Nice to meet you" → "Nice to meet you too! How can I assist you today?"
+            - User: "Who are you?" → "I’m your medical assistant here to help with health questions! What’s on your mind?"
+            """
         response = llm.invoke(casual_prompt).strip()
         print(f"Raw Casual response: {response}")
         response = clean_response(response)
